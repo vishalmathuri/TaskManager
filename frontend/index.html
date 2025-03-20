@@ -3,182 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Task Manager</title>
-    <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f4f4f4;
-        }
-        .container {
-            background: white;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            width: 300px;
-        }
-        input, textarea {
-            width: 100%;
-            padding: 8px;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        button {
-            padding: 8px;
-            background: #28a745;
-            color: white;
-            border: none;
-            cursor: pointer;
-            border-radius: 4px;
-        }
-        button:hover {
-            background: #218838;
-        }
-        ul {
-            list-style: none;
-            padding: 0;
-        }
-        li {
-            background: #ddd;
-            padding: 8px;
-            margin-top: 5px;
-            display: flex;
-            flex-direction: column;
-            border-radius: 4px;
-        }
-        .task-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .description {
-            font-size: 0.9em;
-            color: #555;
-            margin-top: 4px;
-        }
-        .delete, .complete, .edit {
-            background: red;
-            color: white;
-            border: none;
-            padding: 4px;
-            cursor: pointer;
-            border-radius: 4px;
-            margin-left: 5px;
-        }
-        .complete {
-            background: green;
-        }
-        .edit {
-            background: orange;
-        }
-        .completed-task {
-            text-decoration: line-through;
-            color: gray;
-        }
-    </style>
+    <title>Blockchain Task Manager</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/ethers@5.6.0/dist/ethers.umd.min.js"></script>
 </head>
 <body>
-    <div class="container">
-        <h2>Task Manager</h2>
-        <input type="text" id="taskInput" placeholder="Enter a task">
-        <textarea id="taskDescription" placeholder="Enter task description"></textarea>
+    <h2>Blockchain Task Manager</h2>
+    <button id="connectWalletButton" onclick="connectWallet()">Connect MetaMask</button>
+    <p id="walletAddress">Not connected</p>
+    
+    <div id="taskManager" style="display: none;">
+        <input type="text" id="taskInput" placeholder="Enter a task title">
+        <input type="text" id="taskDescription" placeholder="Enter description">
         <button onclick="addTask()">Add Task</button>
+        <button onclick="fetchTasks()">Fetch All Tasks</button>
         <ul id="taskList"></ul>
     </div>
-    
-    <script>
-        const contractAddress = "YOUR_CONTRACT_ADDRESS_HERE";
-        const contractABI = YOUR_CONTRACT_ABI_HERE;
-        
-        let provider, signer, contract;
-        
-        async function connectContract() {
-            if (window.ethereum) {
-                provider = new ethers.providers.Web3Provider(window.ethereum);
-                await provider.send("eth_requestAccounts", []);
-                signer = provider.getSigner();
-                contract = new ethers.Contract(contractAddress, contractABI, signer);
-            } else {
-                alert("Please install MetaMask");
-            }
-        }
-        
-        async function addTask() {
-            let taskInput = document.getElementById("taskInput");
-            let taskDescription = document.getElementById("taskDescription");
-            let taskText = taskInput.value.trim();
-            let descriptionText = taskDescription.value.trim();
-            
-            if (taskText === "") {
-                alert("Please enter a task.");
-                return;
-            }
-            
-            try {
-                let tx = await contract.addTask(taskText, descriptionText);
-                await tx.wait();
-                alert("Task added successfully!");
-            } catch (error) {
-                console.error("Error adding task:", error);
-            }
-        }
-        
-        async function removeTask(button) {
-            let li = button.parentElement.parentElement;
-            let taskIndex = Array.from(li.parentElement.children).indexOf(li);
-            
-            try {
-                let tx = await contract.deleteTask(taskIndex);
-                await tx.wait();
-                alert("Task deleted successfully!");
-                li.remove();
-            } catch (error) {
-                console.error("Error deleting task:", error);
-            }
-        }
-        
-        async function completeTask(button) {
-            let li = button.parentElement.parentElement;
-            let taskIndex = Array.from(li.parentElement.children).indexOf(li);
-            
-            try {
-                let tx = await contract.completeTask(taskIndex);
-                await tx.wait();
-                alert("Task marked as completed!");
-                li.classList.toggle("completed-task");
-            } catch (error) {
-                console.error("Error completing task:", error);
-            }
-        }
-        
-        async function editTask(button) {
-            let li = button.parentElement.parentElement;
-            let taskIndex = Array.from(li.parentElement.children).indexOf(li);
-            let taskText = li.querySelector(".task-text");
-            let descriptionText = li.querySelector(".description");
-            
-            let newTask = prompt("Edit Task:", taskText.innerText);
-            let newDescription = prompt("Edit Description:", descriptionText.innerText);
-            
-            if (newTask !== null && newTask.trim() !== "") {
-                try {
-                    let tx = await contract.editTask(taskIndex, newTask, newDescription);
-                    await tx.wait();
-                    alert("Task updated successfully!");
-                    taskText.innerText = newTask;
-                    descriptionText.innerText = newDescription;
-                } catch (error) {
-                    console.error("Error editing task:", error);
-                }
-            }
-        }
-        
-        connectContract();
-    </script>
+
+    <script src="app.js"></script>
 </body>
 </html>

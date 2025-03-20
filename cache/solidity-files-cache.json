@@ -2,89 +2,12 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "C:\\Users\\vishal\\Desktop\\Task Manager (Blockchain)\\contracts\\TaskManager.sol": {
-      "lastModificationDate": 1741419334352,
-      "contentHash": "b3a95baad28f808dc9ff3c9b53827c14",
+      "lastModificationDate": 1742452966290,
+      "contentHash": "67e5be35b86f42bd382c06fce0faf8d0",
       "sourceName": "contracts/TaskManager.sol",
       "solcConfig": {
-        "version": "0.8.28",
+        "version": "0.8.19",
         "settings": {
-          "evmVersion": "paris",
-          "optimizer": {
-            "enabled": false,
-            "runs": 200
-          },
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [
-        "@openzeppelin/contracts/access/Ownable.sol"
-      ],
-      "versionPragmas": [
-        "^0.8.19"
-      ],
-      "artifacts": [
-        "TaskManager"
-      ]
-    },
-    "C:\\Users\\vishal\\node_modules\\@openzeppelin\\contracts\\access\\Ownable.sol": {
-      "lastModificationDate": 1714814441830,
-      "contentHash": "d3c790edc9ccf808a17c5a6cd13614fd",
-      "sourceName": "@openzeppelin/contracts/access/Ownable.sol",
-      "solcConfig": {
-        "version": "0.8.28",
-        "settings": {
-          "evmVersion": "paris",
-          "optimizer": {
-            "enabled": false,
-            "runs": 200
-          },
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [
-        "../utils/Context.sol"
-      ],
-      "versionPragmas": [
-        "^0.8.20"
-      ],
-      "artifacts": [
-        "Ownable"
-      ]
-    },
-    "C:\\Users\\vishal\\node_modules\\@openzeppelin\\contracts\\utils\\Context.sol": {
-      "lastModificationDate": 1714814441357,
-      "contentHash": "67bfbc07588eb8683b3fd8f6f909563e",
-      "sourceName": "@openzeppelin/contracts/utils/Context.sol",
-      "solcConfig": {
-        "version": "0.8.28",
-        "settings": {
-          "evmVersion": "paris",
           "optimizer": {
             "enabled": false,
             "runs": 200
@@ -107,10 +30,10 @@
       },
       "imports": [],
       "versionPragmas": [
-        "^0.8.20"
+        "^0.8.19"
       ],
       "artifacts": [
-        "Context"
+        "TaskManager"
       ]
     }
   }

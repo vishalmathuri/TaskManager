@@ -1,21 +1,17 @@
-require("dotenv").config();
 const { ethers } = require("hardhat");
 
 async function main() {
-    const [deployer] = await ethers.getSigners();
-    console.log("Deploying contracts with the account:", deployer.address);
+  const TaskManager = await ethers.getContractFactory("TaskManager");
+  const taskManager = await TaskManager.deploy();
 
-    // Deploy TaskManager contract
-    const TaskManager = await ethers.getContractFactory("TaskManager");
-    const taskManager = await TaskManager.deploy();
-    await taskManager.deployed();
-
-    console.log("TaskManager deployed at:", taskManager.address);
+  await taskManager.waitForDeployment(); // Use this instead of `.deployed()`
+  
+  console.log("TaskManager deployed to:", await taskManager.getAddress()); // Correct way to get address
 }
 
 main()
-    .then(() => process.exit(0))
-    .catch((error) => {
-        console.error(error);
-        process.exit(1);
-    });
+  .then(() => process.exit(0))
+  .catch((error) => {
+    console.error(error);
+    process.exit(1);
+  });

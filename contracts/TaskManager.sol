@@ -1,58 +1,61 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
-import "@openzeppelin/contracts/access/Ownable.sol";
-
 contract TaskManager {
     struct Task {
-        uint id;
+        uint256 id;
         string title;
         string description;
-        bool isCompleted;
+        bool completed;
         address owner;
     }
 
-    mapping(uint => Task) public tasks;
-    uint public taskCounter;
+    uint256 private taskCounter;
+    mapping(uint256 => Task) private tasks;
 
-    event TaskAdded(uint taskId, string title, address owner);
-    event TaskCompleted(uint taskId);
-    event TaskEdited(uint taskId, string newTitle, string newDescription);
-    event TaskDeleted(uint taskId);
+    event TaskAdded(uint256 indexed taskId, string title, string description, address owner);
+    event TaskCompleted(uint256 indexed taskId);
+    event TaskEdited(uint256 indexed taskId, string newTitle, string newDescription);
+    event TaskDeleted(uint256 indexed taskId);
 
-    modifier onlyTaskOwner(uint _taskId) {
+    modifier onlyOwner(uint256 _taskId) {
         require(tasks[_taskId].owner == msg.sender, "Not the task owner");
         _;
     }
 
     function addTask(string memory _title, string memory _description) external {
-        uint taskId = taskCounter++;
+        uint256 taskId = taskCounter++;
         tasks[taskId] = Task(taskId, _title, _description, false, msg.sender);
-        emit TaskAdded(taskId, _title, msg.sender);
+        emit TaskAdded(taskId, _title, _description, msg.sender);
     }
 
-    function markTaskCompleted(uint _taskId) external onlyTaskOwner(_taskId) {
-        tasks[_taskId].isCompleted = true;
+    function markTaskCompleted(uint256 _taskId) external onlyOwner(_taskId) {
+        tasks[_taskId].completed = true;
         emit TaskCompleted(_taskId);
     }
 
-    function editTask(uint _taskId, string memory _newTitle, string memory _newDescription) external onlyTaskOwner(_taskId) {
-        Task storage task = tasks[_taskId];
-        task.title = _newTitle;
-        task.description = _newDescription;
+    function editTask(uint256 _taskId, string memory _newTitle, string memory _newDescription) external onlyOwner(_taskId){
+        tasks[_taskId].title = _newTitle;
+        tasks[_taskId].description = _newDescription;
         emit TaskEdited(_taskId, _newTitle, _newDescription);
     }
 
-    function deleteTask(uint _taskId) external onlyTaskOwner(_taskId) {
+    function deleteTask(uint256 _taskId) external onlyOwner(_taskId) {
         delete tasks[_taskId];
         emit TaskDeleted(_taskId);
     }
 
-    function getTasks() external view returns (Task[] memory) {
-        Task[] memory allTasks = new Task[](taskCounter);
-        for (uint i = 0; i < taskCounter; i++) {
-            allTasks[i] = tasks[i];
+    function getAllTasks() external view returns (Task[] memory) {
+        Task[] memory taskList = new Task[](taskCounter);
+        uint256 index = 0;
+
+        for (uint256 i = 0; i < taskCounter; i++) {
+            if (tasks[i].owner != address(0)) { // Ensure task exists
+                taskList[index] = tasks[i];
+                index++;
+            }
         }
-        return allTasks;
+
+        return taskList;
     }
 }
